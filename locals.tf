@@ -17,7 +17,7 @@ locals {
   azs      = slice(data.aws_availability_zones.available.names, 0, 3)
 
   # ElastiCache Configuration
-  elasticache_cluster_id = "eks-ec-redis-cluster"
+  elasticache_cluster_id = "eks-ec-redis-cluster" 
   elasticache_username   = "elasticache-svc"
   elasticache_expiration = "30"
 
@@ -30,7 +30,7 @@ locals {
   eks_iam_role_prefix = "eks-ecr-ec-lab"
 
   # ACM and Route53 Configuration
-  public_domain      = "bsisandbox.com"                # Update with your domain
-  custom_domain_name = "eks-ecr-ec-lab.bsisandbox.com" # Update with your domain
+  public_domain      = "bsisandbox.com"                # Update with your root domain
+  custom_domain_name = "eks-ecr-ec-lab.bsisandbox.com" # Update with your custom domain name
   route53_zone_id    = data.aws_route53_zone.public_domain.zone_id
 }

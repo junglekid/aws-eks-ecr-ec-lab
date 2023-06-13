@@ -1,8 +1,6 @@
 # aws-eks-ecr-ec-lab
-
-# Amazon S3 Security
-![Aamzon S3 Security](./images/aws-s3-security.png)
-## Use TerraForm to build the following:
+![Aamzon EKS EC and ECR](./images/aws-s3-security.png)
+### Use TerraForm to build the following:
 * Amazon Elastic Kubernetes Service (EKS)
 * Amazon Elastic Container Registry (ECR)
 * Amazon ElastiCache
@@ -11,17 +9,18 @@
 * AWS Certificate Manager (ACM)
 * Amazon Virtual Private Cloud (Amazon VPC)
 * IAM policies and roles
-## Set variables in locals.tf
+### Set variables in locals.tf
 * aws region
 * aws profile
 * tags
-* s3 bucket prefix name
-## Update S3 Backend in provider.tf
+* custom_domain_name
+* public_domain
+### Update S3 Backend in provider.tf
 * bucket
 * key
 * profile
 * dynamodb_table
-## Run Terraform
+### Run Terraform
 1. Run the following Terraform commands
     ```
     terraform init
@@ -33,7 +32,7 @@
     
     ![](./images/terraform-apply.png)
 
-# Configure kubectl and EKS Cluster
+### Configure kubectl and EKS Cluster
 EKS Cluster details can be extracted from terraform output or from AWS Console to get the name of cluster. This following command can be used to update the kubeconfig in your local machine where you run kubectl commands to interact with your EKS Cluster.
 ```
 AWS_REGION=$(terraform output -raw aws_region)
@@ -45,7 +44,7 @@ Run update-kubeconfig command
 
 ~/.kube/config file gets updated with cluster details and certificate from the below command
 
-# Create Docker Image and Upload to ECR
+### Create Docker Image and Upload to ECR
 ```
 AWS_REGION=$(terraform output -raw aws_region)
 ECR_REPO=$(terraform output -raw ecr_repo_url)
@@ -54,14 +53,14 @@ docker build --platform linux/amd64 --no-cache --pull -t ${ECR_REPO}:latest ./co
 docker push ${ECR_REPO}:latest
 ```
 
-# Install Metrics Server
+### Install Metrics Server
 ```
 helm repo add metrics-server https://kubernetes-sigs.github.io/metrics-server
 helm upgrade --install metrics-server metrics-server/metrics-server \
   --namespace kube-system
 ```
 
-# Install AWS Load Balancer Controller
+### Install AWS Load Balancer Controller
 ```
 AWS_REGION=$(terraform output -raw aws_region)
 EKS_CLUSTER_NAME=$(terraform output -raw eks_cluster_name)
@@ -75,7 +74,7 @@ helm upgrade --install aws-load-balancer-controller eks/aws-load-balancer-contro
   --set serviceAccount.name=$SA_ALB_NAME
 ```
 
-# Install External DNS 
+### Install External DNS 
 ```
 EKS_CLUSTER_NAME=$(terraform output -raw eks_cluster_name)
 DOMAIN_FILTER=$(terraform output -raw domain_filter)
@@ -89,7 +88,7 @@ helm upgrade --install external-dns external-dns/external-dns \
   --set domainFilters={$DOMAIN_FILTER}
 ```
 
-# Install Color App
+### Install Color App
 ```
 ECR_REPO=$(terraform output -raw ecr_repo_url)
 ELASTICACHE_HOST=$(terraform output -raw elasticache_host)
@@ -120,13 +119,14 @@ COLOR_URL=$(terraform output -raw color_url)
 echo "Color URL: $COLOR_URL"
 curl $COLOR_URL
 ```
-
+Copy the *Color_URL* and paste *Color_URL* in your favorite web browser.
 ### Uninstall Color App
 ```
-helm uninstall --namespace color color
+helm uninstall -n color color
 ```
 
 ### Verify Color App removed successfully
+**NOTE:** May need to wait 1 to 5 minutes for resources to be deleted properly.
 ```
 kubectl -n color get all
 kubectl -n color get ingresses
@@ -134,26 +134,28 @@ kubectl -n color get ingresses
 
 ### Uninstall External DNS
 ```
-helm uninstall --namespace kube-system external-dns
+helm uninstall -n kube-system external-dns
 ```
 
 ### Verify External DNS removed successfully
+**NOTE:** May need to wait 1 to 5 minutes for resources to be deleted properly.
 ```
 kubectl -n kube-system get all -l app.kubernetes.io/name=external-dns
 ```
 
-# Uninstall AWS Load Balancer Controller
+### Uninstall AWS Load Balancer Controller
 ```
-helm uninstall --namespace aws-load-balancer-controller
+helm uninstall -n kube-system aws-load-balancer-controller
 ```
 
 ### Verify AWS Load Balancer Controller removed successfully
+**NOTE:** May need to wait 1 to 5 minutes for resources to be deleted properly.
 ```
 kubectl -n kube-system get all -l app.kubernetes.io/name=aws-load-balancer-controller
 kubectl get ingressclasses -l app.kubernetes.io/name=aws-load-balancer-controller
 ```
 
-## Clean up Terraform
+### Clean up Terraform
 ```
 terraform destroy
 ```
