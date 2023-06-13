@@ -95,9 +95,9 @@ ECR_REPO=$(terraform output -raw ecr_repo_url)
 ELASTICACHE_HOST=$(terraform output -raw elasticache_host)
 ELASTICACHE_PORT=$(terraform output -raw elasticache_port)
 ELASTICACHE_USER=$(terraform output -raw elasticache_user)
-ELASTICACHE_PASSWORD=$(terraform output -raw elasticache_password | base64)
+ELASTICACHE_PASSWORD=$(terraform output -raw elasticache_password)
 SESSION_EXPIRATION=$(terraform output -raw elasticache_expiration)
-SECRET_KEY=$(terraform output -raw elasticache_secret_key | base64)
+SECRET_KEY=$(terraform output -raw elasticache_secret_key)
 ACM_CERTIFICATE_ARN=$(terraform output -raw acm_certificate_arn)
 COLOR_DNS_NAME=$(terraform output -raw color_dns_name)
 helm upgrade --install color ./charts/color \
@@ -123,7 +123,7 @@ curl $COLOR_URL
 
 ### Uninstall Color App
 ```
-helm uninstall color
+helm uninstall --namespace color color
 ```
 
 ### Verify Color App removed successfully
@@ -134,7 +134,7 @@ kubectl -n color get ingresses
 
 ### Uninstall External DNS
 ```
-helm uninstall external-dns
+helm uninstall --namespace kube-system external-dns
 ```
 
 ### Verify External DNS removed successfully
@@ -144,7 +144,7 @@ kubectl -n kube-system get all -l app.kubernetes.io/name=external-dns
 
 # Uninstall AWS Load Balancer Controller
 ```
-helm uninstall aws-load-balancer-controller
+helm uninstall --namespace aws-load-balancer-controller
 ```
 
 ### Verify AWS Load Balancer Controller removed successfully
