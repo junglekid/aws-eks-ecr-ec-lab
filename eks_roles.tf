@@ -35,41 +35,34 @@ resource "kubernetes_service_account" "alb_service_account" {
   ]
 }
 
-# Install AWS ALB Helm Chart
-resource "helm_release" "aws_loadbalancer_controller" {
-  name       = "aws-load-balancer-controller"
-  namespace  = "kube-system"
-  repository = "https://aws.github.io/eks-charts"
-  chart      = "aws-load-balancer-controller"
+# Create ISRA Role for External DNS
+module "external_dns_irsa_role" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~> 5.0"
 
-  set {
-    name  = "region"
-    value = local.aws_region
+  role_name                  = "${local.eks_iam_role_prefix}-external-dns"
+  attach_external_dns_policy = true
+
+  oidc_providers = {
+    ex = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["kube-system:external-dns"]
+    }
   }
+}
 
-  set {
-    name  = "vpcId"
-    value = module.vpc.vpc_id
-  }
-
-  set {
-    name  = "serviceAccount.create"
-    value = "false"
-  }
-
-  set {
-    name  = "serviceAccount.name"
-    value = kubernetes_service_account.alb_service_account.metadata[0].name
-  }
-
-  set {
-    name  = "clusterName"
-    value = module.eks.cluster_name
-  }
-
-  set {
-    name  = "enableCertManager"
-    value = "false"
+# Create K8S Service Account for External DNS 
+resource "kubernetes_service_account" "external_dns_service_account" {
+  metadata {
+    name      = "external-dns"
+    namespace = "kube-system"
+    labels = {
+      "app.kubernetes.io/name"      = "external-dns"
+      "app.kubernetes.io/component" = "controller"
+    }
+    annotations = {
+      "eks.amazonaws.com/role-arn" = module.external_dns_irsa_role.iam_role_arn
+    }
   }
 
   depends_on = [

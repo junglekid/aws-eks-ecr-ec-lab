@@ -28,16 +28,3 @@ module "ecr" {
 
   depends_on = [module.vpc]
 }
-
-# Create Docker Image and upload Docker Image to ECR
-resource "null_resource" "color_image" {
-  depends_on = [module.ecr.repository_url]
-
-  triggers = {
-    docker_file = md5(file("./color/Dockerfile"))
-  }
-  provisioner "local-exec" {
-    interpreter = ["/bin/bash", "-c"]
-    command     = "docker build --platform linux/amd64 --no-cache --pull -t ${module.ecr.repository_url}:latest ./color && aws ecr get-login-password --region ${local.aws_region} | docker login --username AWS --password-stdin ${module.ecr.repository_url} && docker push ${module.ecr.repository_url}:latest"
-  }
-}
