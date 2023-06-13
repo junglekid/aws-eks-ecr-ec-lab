@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.configMap.name | quote }}
+  labels:
+    app: color
+  {{- include "color.labels" . | nindent 4 }}
+data:
+  ELASTICACHE_HOST: {{ .Values.configMap.elasticacheHost | quote }}
+  ELASTICACHE_PORT: {{ .Values.configMap.elasticachePort | quote }}
+  ELASTICACHE_USER: {{ .Values.configMap.elasticacheUser | quote }}
+  SESSION_EXPIRATION: {{ .Values.configMap.sessionExpiration | quote }}

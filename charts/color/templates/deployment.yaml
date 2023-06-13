@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.color.name | quote }}
+  labels:
+    app: color
+  {{- include "color.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.color.replicas }}
+  selector:
+    matchLabels:
+      app: color
+    {{- include "color.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        app: color
+      {{- include "color.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+      - env:
+        envFrom:
+        - configMapRef:
+            name: {{ .Values.configMap.name | quote }}
+        - secretRef:
+            name: {{ .Values.secret.name | quote }}
+        image: {{ .Values.color.container.image.repository }}:{{ .Values.color.container.image.tag }}
+        imagePullPolicy: {{ .Values.color.container.imagePullPolicy }}
+        name: color
+        ports:
+        - containerPort: {{ .Values.color.container.containerPort }}
+          protocol: TCP
+        resources: {{- toYaml .Values.color.container.resources | nindent 10 }}

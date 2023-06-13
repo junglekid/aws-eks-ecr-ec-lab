@@ -1,0 +1,43 @@
+color:
+  name: color
+  container:
+    image:
+      repository: 
+      tag: latest
+    imagePullPolicy: Always
+    resources:
+      requests:
+        cpu: 250m
+        memory: 1Gi
+    containerPort: 8080
+  replicas: 4
+
+# namespace: color 
+
+configMap:
+  name: color
+  elasticacheHost: 
+  elasticachePort: "6379"
+  elasticacheUser: 
+  sessionExpiration: "30"
+
+secret:
+  name: color 
+  elasticachePassword: 
+  secretKey: 
+
+service:
+  name: color
+  port: 80
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+
+ingress:
+  name: ingress-color
+  certificateArn: 
+  dnsHostname: 
+  
