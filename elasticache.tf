@@ -1,14 +1,3 @@
-# Create Amazon ElastiCache Security Group
-module "elasticache_sg" {
-  source = "terraform-aws-modules/security-group/aws//modules/redis"
-
-  name        = "elasticache"
-  description = "Security group for ElastiCache with 6379 ports open within VPC"
-  vpc_id      = module.vpc.vpc_id
-
-  ingress_cidr_blocks = [local.vpc_cidr]
-}
-
 # Create AWS ElastiCache Cluster
 resource "aws_elasticache_replication_group" "elasticache" {
   replication_group_id        = local.elasticache_cluster_id
@@ -28,6 +17,17 @@ resource "aws_elasticache_replication_group" "elasticache" {
   user_group_ids              = [aws_elasticache_user_group.elasticache.id]
 
   depends_on = [module.vpc]
+}
+
+# Create Amazon ElastiCache Security Group
+module "elasticache_sg" {
+  source = "terraform-aws-modules/security-group/aws//modules/redis"
+
+  name        = "elasticache"
+  description = "Security group for ElastiCache with 6379 ports open within VPC"
+  vpc_id      = module.vpc.vpc_id
+
+  ingress_cidr_blocks = [local.vpc_cidr]
 }
 
 # Generate random password for AWS ElastiCache User
