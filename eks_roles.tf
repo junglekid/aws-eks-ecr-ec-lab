@@ -9,7 +9,7 @@ module "load_balancer_controller_irsa_role" {
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:aws-load-balancer-controller"]
+      namespace_service_accounts = ["kube-system:${local.eks_alb_service_account_name}"]
     }
   }
 }
@@ -17,10 +17,10 @@ module "load_balancer_controller_irsa_role" {
 # Create K8S Service Account for AWS ALB Helm Chart
 resource "kubernetes_service_account" "alb_service_account" {
   metadata {
-    name      = "aws-load-balancer-controller"
+    name      = local.eks_alb_service_account_name
     namespace = "kube-system"
     labels = {
-      "app.kubernetes.io/name"      = "aws-load-balancer-controller"
+      "app.kubernetes.io/name"      = local.eks_alb_service_account_name
       "app.kubernetes.io/component" = "controller"
     }
     annotations = {
@@ -46,7 +46,7 @@ module "external_dns_irsa_role" {
   oidc_providers = {
     ex = {
       provider_arn               = module.eks.oidc_provider_arn
-      namespace_service_accounts = ["kube-system:external-dns"]
+      namespace_service_accounts = ["kube-system:${local.eks_alb_external_dns_service_account_name}"]
     }
   }
 }
@@ -54,10 +54,10 @@ module "external_dns_irsa_role" {
 # Create K8S Service Account for External DNS 
 resource "kubernetes_service_account" "external_dns_service_account" {
   metadata {
-    name      = "external-dns"
+    name      = local.eks_alb_external_dns_service_account_name
     namespace = "kube-system"
     labels = {
-      "app.kubernetes.io/name"      = "external-dns"
+      "app.kubernetes.io/name"      = local.eks_alb_external_dns_service_account_name
       "app.kubernetes.io/component" = "controller"
     }
     annotations = {

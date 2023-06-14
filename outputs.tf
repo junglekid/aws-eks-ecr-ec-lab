@@ -40,13 +40,13 @@ output "elasticache_expiration" {
 
 # Output ElastiCache Password
 output "elasticache_password" {
-  value = random_password.elasticache.result
+  value     = random_password.elasticache.result
   sensitive = true
 }
 
 # Output ElastiCache Session Secret Key
 output "elasticache_secret_key" {
-  value = random_password.elasticache_secret_key.result
+  value     = random_password.elasticache_secret_key.result
   sensitive = true
 }
 
@@ -60,13 +60,13 @@ output "color_dns_name" {
   value = local.custom_domain_name
 }
 
-# Output K8S Service Account for AWS Load Balancer Controller
-output "k8s_sa_alb_name" {
+# Output EKS Service Account for AWS Load Balancer Controller
+output "eks_sa_alb_name" {
   value = kubernetes_service_account.alb_service_account.metadata[0].name
 }
 
-# Output K8S Service Account for External DNS
-output "k8s_sa_external_dns_name" {
+# Output EKS Service Account for External DNS
+output "eks_sa_external_dns_name" {
   value = kubernetes_service_account.external_dns_service_account.metadata[0].name
 }
 
