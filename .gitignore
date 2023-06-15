@@ -42,7 +42,7 @@ override.tf.json
 terraform.rc
 
 # Ignore Terraform Plan Output files
-*.plan
+plan.out
 
 # Ignore Mac OS X files
 .DS_Store
