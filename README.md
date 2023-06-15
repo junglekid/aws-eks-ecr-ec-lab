@@ -1,4 +1,4 @@
-# Amazon ElastiCache, EKS, and ECR Lab
+# Using Amazon ElastiCache for Redis as a Session Cache-Store
 
 ![Aamzon ElastiCache, EKS, and ECR](./images/amazon_ec_eks_ecr_lab.png)
 
