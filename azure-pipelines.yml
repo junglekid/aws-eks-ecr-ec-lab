@@ -14,7 +14,7 @@ stages:
 - stage: Build
   displayName: Build image
   jobs:
-  - job: Build
+  - job: Build_and Push
     displayName: Build
     pool:
       vmImage: ubuntu-latest
@@ -25,15 +25,17 @@ stages:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/color/Dockerfile'
         repository: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
-        tags: |
-          $(tag)
+        # tags: |
+        #   $(tag)
     - task: ECRPushImage@1
       inputs:
         awsCredentials: 'AWS ECR'
         regionName: 'us-west-2'
         imageSource: 'imagename'
         sourceImageName: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
+        sourceImageTag: $(Build.BuildId)
         repositoryName: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
+        pushTag: latest
         logRequest: true
         logResponse: true
-        autoCreateRepository: true
+
