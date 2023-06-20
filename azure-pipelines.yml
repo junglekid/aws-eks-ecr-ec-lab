@@ -13,7 +13,7 @@ stages:
 - stage: Build
   displayName: Build image
   jobs:
-  - job: Build_and Push
+  - job: Build_and_Push
     displayName: Build
     pool:
       vmImage: ubuntu-latest
