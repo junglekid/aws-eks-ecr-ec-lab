@@ -24,17 +24,17 @@ stages:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/color/Dockerfile'
         repository: 'dallin-ecr-lab'
-        # tags: |
-        #   $(tag)
+        tags: |
+          $(tag)
     - task: ECRPushImage@1
       inputs:
         awsCredentials: 'aws_ecr'
         regionName: 'us-west-2'
         imageSource: 'imagename'
         sourceImageName: 'dallin-ecr-lab'
-        sourceImageTag: $(Build.BuildId)
+        sourceImageTag: $(tag)
         repositoryName: 'dallin-ecr-lab'
-        pushTag: latest
+        pushTag: $(tag)
         logRequest: true
         logResponse: true
 
