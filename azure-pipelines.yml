@@ -10,10 +10,10 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Build
-  displayName: Build image
+- stage: Build and Push Image
+  displayName: Build and push image
   jobs:
-  - job: Build_and_Push
+  - job: Build
     displayName: Build
     pool:
       vmImage: ubuntu-latest
@@ -26,6 +26,11 @@ stages:
         repository: 'dallin-ecr-lab'
         tags: |
           $(tag)
+  - job: Push
+    displayName: Push
+    pool:
+      vmImage: ubuntu-latest
+    steps:
     - task: ECRPushImage@1
       inputs:
         awsCredentials: 'aws_ecr'
@@ -35,6 +40,3 @@ stages:
         sourceImageTag: $(tag)
         repositoryName: 'dallin-ecr-lab'
         pushTag: $(tag)
-        logRequest: true
-        logResponse: true
-
