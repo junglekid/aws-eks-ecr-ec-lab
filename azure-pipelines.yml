@@ -1,4 +1,3 @@
-# Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
@@ -29,7 +28,7 @@ stages:
         #   $(tag)
     - task: ECRPushImage@1
       inputs:
-        awsCredentials: 'AWS ECR'
+        awsCredentials: 'aws_ecr'
         regionName: 'us-west-2'
         imageSource: 'imagename'
         sourceImageName: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
