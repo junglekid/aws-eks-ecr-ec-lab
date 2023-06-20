@@ -25,6 +25,7 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/color/Dockerfile'
+        repository: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
         tags: |
           $(tag)
     - task: ECRPushImage@1
@@ -32,4 +33,7 @@ stages:
         awsCredentials: 'AWS ECR'
         regionName: 'us-west-2'
         imageSource: 'imagename'
-        repositoryName: '- task: ECRPushImage@1   inputs:     awsCredentials: ''AWS ECR''     regionName: ''us-west-2''     imageSource: ''imagename''     repositoryName: ''704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
+        sourceImageName: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
+        sourceImageTag: $(tag)
+        repositoryName: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
+        pushTag: $(tag)
