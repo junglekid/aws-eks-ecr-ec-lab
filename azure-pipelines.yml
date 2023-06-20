@@ -11,10 +11,10 @@ variables:
 
 stages:
 - stage: Build_and_Push
-  displayName: Build and push image
+  displayName: Build and Push image
   jobs:
-  - job: Build
-    displayName: Build
+  - job: Build_and_Push
+    displayName: Build and Push image
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -23,20 +23,16 @@ stages:
       inputs:
         command: build
         dockerfile: '$(Build.SourcesDirectory)/color/Dockerfile'
-        repository: 'dallin-ecr-lab'
+        repository: $(DOCKER_REPOSITORY_NAME)
         tags: |
           $(tag)
-  - job: Push
-    displayName: Push
-    pool:
-      vmImage: ubuntu-latest
-    steps:
     - task: ECRPushImage@1
+      displayName: Push an image
       inputs:
         awsCredentials: 'aws_ecr'
-        regionName: 'us-west-2'
+        regionName: $(AWS_REGION)
         imageSource: 'imagename'
-        sourceImageName: 'dallin-ecr-lab'
+        sourceImageName: $(DOCKER_REPOSITORY_NAME)
         sourceImageTag: $(tag)
-        repositoryName: 'dallin-ecr-lab'
+        repositoryName:  $(DOCKER_REPOSITORY_NAME)
         pushTag: $(tag)
