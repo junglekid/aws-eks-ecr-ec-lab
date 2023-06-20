@@ -1,12 +1,3 @@
-# Docker
-- task: ECRPushImage@1
-  inputs:
-    awsCredentials: 'AWS ECR'
-    regionName: 'us-west-2'
-    imageSource: 'imagename'
-    sourceImageName: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
-    repositoryName: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
-    autoCreateRepository: true
 # Build a Docker image
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
@@ -42,7 +33,7 @@ stages:
         regionName: 'us-west-2'
         imageSource: 'imagename'
         sourceImageName: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
-          repositoryName: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
+        repositoryName: '704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
         logRequest: true
         logResponse: true
         autoCreateRepository: true
