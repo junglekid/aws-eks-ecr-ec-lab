@@ -27,3 +27,9 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/color/Dockerfile'
         tags: |
           $(tag)
+    - task: ECRPushImage@1
+      inputs:
+        awsCredentials: 'AWS ECR'
+        regionName: 'us-west-2'
+        imageSource: 'imagename'
+        repositoryName: '- task: ECRPushImage@1   inputs:     awsCredentials: ''AWS ECR''     regionName: ''us-west-2''     imageSource: ''imagename''     repositoryName: ''704855531002.dkr.ecr.us-west-2.amazonaws.com/dallin-ecr-lab'
