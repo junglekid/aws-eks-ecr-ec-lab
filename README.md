@@ -4,9 +4,30 @@
 
 ## Introduction
 
-This guide will show you how to use Amazon ElastiCache for Redis as a distributed cache for user session management. You will use Amazon Elastic Kubernetes Service (EKS) to deploy a Python Flask application. The Python Flask application will randomly create a color cached and store it in the server-side session state to Amazon ElastiCache for Redis. As part of this guide, you will create a container image containing the code for the Python Flask container. You will be uploaded the container image to a private Amazon Elastic Container Registry. 
+This guide will show you how to use Amazon ElastiCache for Redis as a distributed cache for user session management. You will use Amazon Elastic Kubernetes Service (EKS) to deploy a Python Flask application. The Python Flask application will randomly create a color cached and store it in the server-side session state to Amazon ElastiCache for Redis. As part of this guide, you will create a container image containing the code for the Python Flask container. You will be uploaded the container image to a private Amazon Elastic Container Registry.
 
 You can access all of the code used in my [GitHub Repository](https://github.com/junglekid/aws-eks-ecr-ec-lab).  
+
+## Table of Contents
+
+1. [Prerequisites](#prerequisites)
+2. [Architecture Overview](#architecture-overview)
+3. [Setup](#setup)
+4. [Configure access to Amazon EKS Cluster](#configure-access-to-amazon-eks-cluster)
+5. [Create and Push Docker Image to Amazon ECR](#create-and-push-docker-image-to-amazon-ecr)
+   1. [Build the Docker image](#build-the-docker-image)
+   2. [Push the Docker image to Amazon ECR](#push-the-docker-image-to-amazon-ecr)
+6. [Deploy Supporting Services to Kubernetes](#deploy-supporting-services-to-kubernetes)
+   1. [Metrics Server](#metrics-server)
+   2. [AWS Load Balancer Controller](#aws-load-balancer-controller)
+   3. [External DNS](#external-dns)
+7. [Deploy Python Flask Color Application](#deploy-python-flask-color-application)
+8. [Verify and Test Python Flask Color Application](#verify-and-test-python-flask-color-application)
+9. [Clean Up](#clean-up)
+   1. [Clean up Python Flask Color Application from Kubernetes](#clean-up-python-flask-color-application-from-kubernetes)
+   2. [Clean up External DNS from Kubernetes](#clean-up-external-dns-from-kubernetes)
+   3. [Clean up AWS Load Balancer Controller from Kubernetes](#clean-up-aws-load-balancer-controller-from-kubernetes)
+   4. [Clean up Terraform](#clean-up-terraform)
 
 ## Prerequisites
 
@@ -87,6 +108,7 @@ aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
 ```
 
 Results of configuring kubeconfig.
+
 ![Configure Amazon EKS Cluster](./images/kubeconfig.png)
 
 ## Create and Push Docker Image to Amazon ECR
