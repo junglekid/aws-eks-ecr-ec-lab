@@ -10,24 +10,25 @@ You can access all of the code used in my [GitHub Repository](https://github.com
 
 ## Table of Contents
 
-1. [Prerequisites](#prerequisites)
-2. [Architecture Overview](#architecture-overview)
-3. [Setup](#setup)
-4. [Configure access to Amazon EKS Cluster](#configure-access-to-amazon-eks-cluster)
-5. [Create and Push Docker Image to Amazon ECR](#create-and-push-docker-image-to-amazon-ecr)
+1. [Introduction](#introduction)
+2. [Prerequisites](#prerequisites)
+3. [Architecture Overview](#architecture-overview)
+4. [Setup](#setup)
+5. [Configure access to Amazon EKS Cluster](#configure-access-to-amazon-eks-cluster)
+6. [Create and Push Docker Image to Amazon ECR](#create-and-push-docker-image-to-amazon-ecr)
    1. [Build the Docker image](#build-the-docker-image)
    2. [Push the Docker image to Amazon ECR](#push-the-docker-image-to-amazon-ecr)
-6. [Deploy Supporting Services to Kubernetes](#deploy-supporting-services-to-kubernetes)
+7. [Deploy Supporting Services to Kubernetes](#deploy-supporting-services-to-kubernetes)
    1. [Metrics Server](#metrics-server)
    2. [AWS Load Balancer Controller](#aws-load-balancer-controller)
    3. [External DNS](#external-dns)
-7. [Deploy Python Flask Color Application](#deploy-python-flask-color-application)
-8. [Verify and Test Python Flask Color Application](#verify-and-test-python-flask-color-application)
-9. [Clean Up](#clean-up)
-   1. [Clean up Python Flask Color Application from Kubernetes](#clean-up-python-flask-color-application-from-kubernetes)
-   2. [Clean up External DNS from Kubernetes](#clean-up-external-dns-from-kubernetes)
-   3. [Clean up AWS Load Balancer Controller from Kubernetes](#clean-up-aws-load-balancer-controller-from-kubernetes)
-   4. [Clean up Terraform](#clean-up-terraform)
+8. [Deploy Python Flask Color Application](#deploy-python-flask-color-application)
+9. [Verify and Test Python Flask Color Application](#verify-and-test-python-flask-color-application)
+10. [Clean Up](#clean-up)
+    1. [Clean up Python Flask Color Application from Kubernetes](#clean-up-python-flask-color-application-from-kubernetes)
+    2. [Clean up External DNS from Kubernetes](#clean-up-external-dns-from-kubernetes)
+    3. [Clean up AWS Load Balancer Controller from Kubernetes](#clean-up-aws-load-balancer-controller-from-kubernetes)
+    4. [Clean up Terraform](#clean-up-terraform)
 
 ## Prerequisites
 
